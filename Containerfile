@@ -6,7 +6,7 @@ COPY build_files /
 # Tag must match the kernel flavor + Fedora release of the base image below.
 # silverblue-main:stable ships Fedora's mainline kernel, so use `main-<fedora-release>`.
 # Bump this tag when rebasing onto a newer Fedora release.
-FROM ghcr.io/ublue-os/akmods-zfs:main-42 AS akmods-zfs
+FROM ghcr.io/ublue-os/akmods-zfs:main-43 AS akmods-zfs
 
 # Base Image: ublue-os Silverblue (GNOME, bootc-native rebuild of Fedora Silverblue)
 FROM ghcr.io/ublue-os/silverblue-main:stable
