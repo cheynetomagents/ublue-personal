@@ -39,7 +39,7 @@ just spawn-vm               # Run with systemd-vmspawn (GUI console)
 
 ## Important Constraints
 
-- The `akmods-zfs` tag (`main-43`) must match the kernel flavor and Fedora release of the base image. Bump it when rebasing to a new Fedora release.
+- The `akmods-zfs` tag (`coreos-stable-43`) must match the kernel flavor and Fedora release of the base image. The `main-*` tags no longer exist upstream; use `coreos-stable-<fedora-release>` which tracks the same kernel series as Silverblue. Bump it when rebasing to a new Fedora release.
 - COPRs added in `build.sh` must be disabled at the end of the script so they are not active on end-user systems.
 - Do not commit `cosign.key` — it must be stored only as the `SIGNING_SECRET` GitHub Actions secret.
 - The image name is derived from the GitHub repository name by the CI workflow (`IMAGE_NAME: "${{ github.event.repository.name }}"`). The local default is `ublue-personal` (first line of `Justfile`).
