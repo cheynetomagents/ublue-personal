@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Edit",
+      "Write",
+      "Bash(gh *)",
+      "Bash(git *)",
+      "Bash(just *)",
+      "Bash(shellcheck *)",
+      "Bash(shfmt *)",
+      "Bash(mkdir *)",
+      "Bash(chmod *)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(jq *)"
+    ]
+  }
+}

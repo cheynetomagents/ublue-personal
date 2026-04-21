@@ -1,0 +1,75 @@
+---
+name: Test container image
+on:
+  workflow_run:
+    workflows: ["Build container image"]
+    types:
+      - completed
+  workflow_dispatch:
+    inputs:
+      image_ref:
+        description: 'Full image ref to test (e.g. ghcr.io/owner/ublue-personal:latest)'
+        required: false
+        default: ''
+
+env:
+  IMAGE_NAME: "${{ github.event.repository.name }}"
+  IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"
+
+jobs:
+  test:
+    name: Smoke test image
+    runs-on: ubuntu-24.04
+    # Only run if the triggering build workflow succeeded (or if manually dispatched)
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
+
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - name: Prepare environment
+        run: |
+          echo "IMAGE_REGISTRY=${IMAGE_REGISTRY,,}" >> "${GITHUB_ENV}"
+          echo "IMAGE_NAME=${IMAGE_NAME,,}" >> "${GITHUB_ENV}"
+
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - name: Resolve image ref
+        id: ref
+        env:
+          INPUT_IMAGE_REF: ${{ inputs.image_ref }}
+        run: |
+          if [[ -n "${INPUT_IMAGE_REF}" ]]; then
+            echo "image=${INPUT_IMAGE_REF}" >> "${GITHUB_OUTPUT}"
+          else
+            echo "image=${IMAGE_REGISTRY}/${IMAGE_NAME}:latest" >> "${GITHUB_OUTPUT}"
+          fi
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull image
+        env:
+          IMAGE_REF: ${{ steps.ref.outputs.image }}
+        run: |
+          echo "Testing image: ${IMAGE_REF}"
+          podman pull "${IMAGE_REF}"
+
+      - name: Run smoke tests
+        env:
+          IMAGE_REF: ${{ steps.ref.outputs.image }}
+        run: |
+          podman run --rm \
+            --privileged \
+            --entrypoint /bin/bash \
+            -v "$(pwd)/build_files/test.sh:/test.sh:ro" \
+            "${IMAGE_REF}" \
+            /test.sh
