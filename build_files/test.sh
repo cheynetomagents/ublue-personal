@@ -83,6 +83,7 @@ UNITS=(
     smartd.service
     sysstat.service
     zfs-import-cache.service
+    zfs-import.target
     zfs-mount.service
     zfs.target
 )
