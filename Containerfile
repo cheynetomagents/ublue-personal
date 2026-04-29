@@ -10,7 +10,7 @@ COPY build_files /
 FROM ghcr.io/ublue-os/akmods-zfs:coreos-stable-43 AS akmods-zfs
 
 # Base Image: ublue-os Silverblue (GNOME, bootc-native rebuild of Fedora Silverblue)
-FROM ghcr.io/ublue-os/silverblue-main:stable
+FROM ghcr.io/ublue-os/silverblue-main:43
 
 ### MODIFICATIONS
 ## Packages and ZFS integration are configured in build_files/build.sh.
