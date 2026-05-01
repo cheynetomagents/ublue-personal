@@ -1,6 +1,6 @@
 # ublue-personal
 
-A personal custom [bootc](https://github.com/bootc-dev/bootc) OCI image based on [Fedora Silverblue](https://fedoraproject.org/silverblue/) via [Universal Blue](https://universal-blue.org/). Layers ZFS kernel modules and a curated set of packages on top of `ghcr.io/ublue-os/silverblue-main:stable`. Built and published daily via GitHub Actions.
+A personal custom [bootc](https://github.com/bootc-dev/bootc) OCI image based on [Fedora Silverblue](https://fedoraproject.org/silverblue/) via [Universal Blue](https://universal-blue.org/). Layers ZFS kernel modules and a curated set of packages on top of `ghcr.io/ublue-os/silverblue-main:43` (Fedora 43). Built and published daily via GitHub Actions.
 
 **Image:** `ghcr.io/cheynetomagents/ublue-personal:latest`
 
