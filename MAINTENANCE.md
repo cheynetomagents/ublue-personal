@@ -33,17 +33,17 @@ If a package requires a third-party repo, add the repo setup before the install 
 
 Two places must be updated together:
 
-1. **`Containerfile`** — change the base image tag:
+1. **`Containerfile`** — change the base image tag to the new Fedora release number:
    ```
-   FROM ghcr.io/ublue-os/silverblue-main:stable
+   FROM ghcr.io/ublue-os/silverblue-main:43
    ```
-   This automatically tracks the current stable Fedora release, so usually no change is needed here.
+   Replace `43` with the new Fedora release number. Note: the `stable` tag no longer exists upstream.
 
 2. **`Containerfile`** — change the `akmods-zfs` tag to match the new Fedora version:
    ```
    FROM ghcr.io/ublue-os/akmods-zfs:coreos-stable-43
    ```
-   Replace `43` with the new Fedora release number (e.g. `coreos-stable-44` for Fedora 44). The `coreos-stable-<N>` tag tracks the same kernel series as Silverblue on that Fedora release.
+   Replace `43` with the new Fedora release number (e.g. `coreos-stable-44` for Fedora 44). The `coreos-stable-<N>` tag tracks the same kernel series as Silverblue on that Fedora release. **Both tags must be bumped together** — mismatched versions will break ZFS module loading.
 
    Available tags can be found at: `https://github.com/ublue-os/akmods/pkgs/container/akmods-zfs`
 
