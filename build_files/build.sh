@@ -2,12 +2,18 @@
 
 set -ouex pipefail
 
-### ZFS: install the prebuilt ublue-os akmod RPMs that were bind-mounted from
-### the akmods-zfs stage in the Containerfile (at /run/akmods-zfs).
-dnf5 install -y \
-    /run/akmods-zfs/rpms/ublue-os/ublue-os-akmods*.rpm \
-    /run/akmods-zfs/rpms/kmods/kmod-zfs-*.rpm \
-    /run/akmods-zfs/rpms/kmods/zfs-*.rpm
+### ZFS: install the prebuilt akmod RPMs bind-mounted from the akmods-zfs stage.
+### RPMs live under rpms/kmods/zfs/ in the akmods-zfs image.
+ZFS_RPMS=(
+    /run/akmods-zfs/rpms/kmods/zfs/kmod-zfs-*.rpm
+    /run/akmods-zfs/rpms/kmods/zfs/libnvpair[0-9]-*.rpm
+    /run/akmods-zfs/rpms/kmods/zfs/libuutil[0-9]-*.rpm
+    /run/akmods-zfs/rpms/kmods/zfs/libzfs[0-9]-*.rpm
+    /run/akmods-zfs/rpms/kmods/zfs/libzpool[0-9]-*.rpm
+    /run/akmods-zfs/rpms/kmods/zfs/python3-pyzfs-*.rpm
+    /run/akmods-zfs/rpms/kmods/zfs/zfs-[0-9]*.rpm
+)
+dnf5 install -y "${ZFS_RPMS[@]}"
 
 ### Third-party repos needed for a few packages that aren't in Fedora or RPMFusion.
 # Tailscale
