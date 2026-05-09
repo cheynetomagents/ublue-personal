@@ -88,8 +88,11 @@ dnf5 install -y \
     wireshark \
     zsh
 
-# NetBird post-install scriptlet tries to start a service (fails in container); skip scripts.
+# NetBird %post scriptlet calls "netbird service install" then tries to start it (fails in
+# container). Install without scripts, then run "service install" manually to lay down the
+# unit file, skipping the start attempt.
 dnf5 install -y --setopt=tsflags=noscripts netbird
+netbird service install
 
 # Turn off COPRs so they aren't enabled on user systems by default.
 dnf5 -y copr disable pgdev/ghostty
