@@ -88,11 +88,27 @@ dnf5 install -y \
     wireshark \
     zsh
 
-# NetBird %post scriptlet calls "netbird service install" then tries to start it (fails in
-# container). Install without scripts, then run "service install" manually to lay down the
-# unit file, skipping the start attempt.
+# NetBird %post scriptlet calls "netbird service install" to dynamically generate the systemd
+# unit, then tries to start it -- both fail in a container. Install without scripts and write
+# the unit file directly (content matches what kardianos/service generates at runtime).
 dnf5 install -y --setopt=tsflags=noscripts netbird
-netbird service install
+cat > /usr/lib/systemd/system/netbird.service <<'UNIT'
+[Unit]
+Description=NetBird mesh network client
+ConditionFileIsExecutable=/usr/bin/netbird
+After=network.target syslog.target
+
+[Service]
+StartLimitInterval=5
+StartLimitBurst=10
+ExecStart=/usr/bin/netbird service run --log-level info --daemon-addr unix:///var/run/netbird.sock
+RestartSec=120
+Environment=SYSTEMD_UNIT=netbird
+EnvironmentFile=-/etc/sysconfig/netbird
+
+[Install]
+WantedBy=multi-user.target
+UNIT
 
 # Turn off COPRs so they aren't enabled on user systems by default.
 dnf5 -y copr disable pgdev/ghostty
