@@ -68,7 +68,6 @@ dnf5 install -y \
     libvirt \
     lm_sensors \
     mc \
-    netbird \
     nmap \
     nvtop \
     pavucontrol \
@@ -88,6 +87,9 @@ dnf5 install -y \
     virt-viewer \
     wireshark \
     zsh
+
+# NetBird post-install scriptlet tries to start a service (fails in container); skip scripts.
+dnf5 install -y --setopt=tsflags=noscripts netbird
 
 # Turn off COPRs so they aren't enabled on user systems by default.
 dnf5 -y copr disable pgdev/ghostty
