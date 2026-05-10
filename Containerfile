@@ -7,7 +7,7 @@ COPY build_files /
 # silverblue-main:44 ships Fedora 44's mainline kernel.
 # coreos-stable-44 tracks the same kernel series on Fedora 44.
 # Bump the Fedora version suffix when rebasing onto a newer Fedora release.
-FROM ghcr.io/ublue-os/akmods-zfs:coreos-stable-44 AS akmods-zfs
+FROM ghcr.io/ublue-os/akmods-zfs:coreos-testing-44-x86_44 AS akmods-zfs
 
 # Base Image: ublue-os Silverblue (GNOME, bootc-native rebuild of Fedora Silverblue)
 FROM ghcr.io/ublue-os/silverblue-main:44
