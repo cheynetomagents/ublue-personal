@@ -4,11 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Repo Is
 
-A personal custom [bootc](https://github.com/bootc-dev/bootc) OCI image derived from `ghcr.io/ublue-os/silverblue-main:43` (GNOME Fedora Silverblue). It layers ZFS kernel modules and a curated set of packages on top of the upstream ublue image. The built image is published to GHCR via GitHub Actions and consumed via `bootc switch` / `bootc upgrade` on the running system.
+A personal custom [bootc](https://github.com/bootc-dev/bootc) OCI image derived from `ghcr.io/ublue-os/silverblue-main:44` (GNOME Fedora Silverblue). It layers ZFS kernel modules and a curated set of packages on top of the upstream ublue image. The built image is published to GHCR via GitHub Actions and consumed via `bootc switch` / `bootc upgrade` on the running system.
 
 ## Key Files
 
-- `Containerfile` — Multi-stage build. Pulls prebuilt ZFS RPMs from `ghcr.io/ublue-os/akmods-zfs:coreos-stable-43`, bind-mounts them, then runs `build_files/build.sh` against the Silverblue base. Ends with `bootc container lint`.
+- `Containerfile` — Multi-stage build. Pulls prebuilt ZFS RPMs from `ghcr.io/ublue-os/akmods-zfs:coreos-stable-44`, bind-mounts them, then runs `build_files/build.sh` against the Silverblue base. Ends with `bootc container lint`.
 - `build_files/build.sh` — All package installation and systemd unit enables happen here. This is the primary file to edit when adding/removing packages or services.
 - `Justfile` — Local build and VM-testing commands (see below).
 - `disk_config/` — TOML configs for bootc-image-builder: `disk.toml` (qcow2/raw), `iso-gnome.toml`, `iso-kde.toml`.
@@ -39,7 +39,7 @@ just spawn-vm               # Run with systemd-vmspawn (GUI console)
 
 ## Important Constraints
 
-- The `akmods-zfs` tag (`coreos-stable-43`) must match the kernel flavor and Fedora release of the base image. The `main-*` tags no longer exist upstream; use `coreos-stable-<fedora-release>` which tracks the same kernel series as Silverblue. Bump it when rebasing to a new Fedora release.
+- The `akmods-zfs` tag (`coreos-stable-44`) must match the kernel flavor and Fedora release of the base image. The `main-*` tags no longer exist upstream; use `coreos-stable-<fedora-release>` which tracks the same kernel series as Silverblue. Bump it when rebasing to a new Fedora release.
 - COPRs added in `build.sh` must be disabled at the end of the script so they are not active on end-user systems.
 - Do not commit `cosign.key` — it must be stored only as the `SIGNING_SECRET` GitHub Actions secret.
 - The image name is derived from the GitHub repository name by the CI workflow (`IMAGE_NAME: "${{ github.event.repository.name }}"`). The local default is `ublue-personal` (first line of `Justfile`).

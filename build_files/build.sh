@@ -36,7 +36,7 @@ dnf5 -y copr enable pgdev/ghostty
 dnf5 install -y \
     android-tools \
     asciinema \
-    btrfs-assistant \
+    btrbk \
     clamav \
     clamd \
     cloud-utils \
